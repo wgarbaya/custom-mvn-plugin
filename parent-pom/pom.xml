@@ -21,7 +21,6 @@
 			</resource>
 		</resources>
 		<plugins>
-			<!-- plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-jar-plugin</artifactId> <version>3.0.2</version> <configuration> <excludes> <exclude>src/main/resources/Datasources/*</exclude> </excludes> </configuration> </plugin -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>xml-maven-plugin</artifactId>
@@ -34,11 +33,17 @@
 					</execution>
 				</executions>
 				<configuration>
-					<transformationSets>
+ 					<transformationSets>
 						<transformationSet>
 							<dir>src/main/resources/Datasources</dir>
 							<stylesheet>Transfomation-DS.xslt</stylesheet>
 							<outputDir>target/generated-resources/XML_Datasources/</outputDir>
+							<outputProperties>
+								<outputProperty>
+									<name>omit-xml-declaration</name>
+									<value>yes</value>
+								</outputProperty>
+							</outputProperties>
 							<fileMappers>
 								<fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
 									<targetExtension>.xml</targetExtension>
@@ -51,12 +56,30 @@
 					</resourceBundles>
 				</configuration>
 				<dependencies>
-					<dependency>
+ 					<dependency>
 						<groupId>fr.dilaw.mplugin</groupId>
 						<artifactId>customdeploy-maven-plugin</artifactId>
 						<version>0.0.1-SNAPSHOT</version>
 					</dependency>
 				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>fr.dilaw.mplugin</groupId>
+				<artifactId>customdeploy-maven-plugin</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>merge-file</goal>
+						</goals>
+						<phase>install</phase>
+					</execution>
+				</executions>
+				<configuration>
+					<msg>
+					<![CDATA[<?xml version="1.0" encoding="UTF-8"?>]]>
+					</msg>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

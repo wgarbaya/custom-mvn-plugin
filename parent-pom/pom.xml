@@ -1,0 +1,63 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>fr.dilaw.mplugin</groupId>
+	<artifactId>parent-pom</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>Parent pom</name>
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>Datasources/**</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>target/generated-resources</directory>
+				<includes>
+					<include>XML_Datasources/**</include>
+				</includes>
+			</resource>
+		</resources>
+		<plugins>
+			<!-- plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-jar-plugin</artifactId> <version>3.0.2</version> <configuration> <excludes> <exclude>src/main/resources/Datasources/*</exclude> </excludes> </configuration> </plugin -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>xml-maven-plugin</artifactId>
+				<version>1.0.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>transform</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<transformationSets>
+						<transformationSet>
+							<dir>src/main/resources/Datasources</dir>
+							<stylesheet>Transfomation-DS.xslt</stylesheet>
+							<outputDir>target/generated-resources/XML_Datasources/</outputDir>
+							<fileMappers>
+								<fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+									<targetExtension>.xml</targetExtension>
+								</fileMapper>
+							</fileMappers>
+						</transformationSet>
+					</transformationSets>
+					<resourceBundles>
+						<resourceBundle>fr.dilaw.mplugin:customdeploy-maven-plugin:0.0.1</resourceBundle>
+					</resourceBundles>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>fr.dilaw.mplugin</groupId>
+						<artifactId>customdeploy-maven-plugin</artifactId>
+						<version>0.0.1-SNAPSHOT</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+</project>
